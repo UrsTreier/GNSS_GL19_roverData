@@ -154,8 +154,13 @@ cat(paste0(Sys.time(), "\n -> Editing of Data Entries\n\n",
 setwd(base.dir)
 ##' end log entry 
 ##'
-##' Start correcting typos in data labels
-##' -> LDI label editing
+##' Correcting of data label inconsistencies / typos
+##' 
+##' 1. LDI label editing
+# df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ] 
+# df.search <- df.e[grep("LDI_0[6-7]", df.e[, "GCP"]), ]
+##' 
+##' -> smaller edits
 df.e[df.e$GCP == "LDI_12", "GCP"] <- "LDI_012"
 df.e[df.e$GCP == "LDI_61", "GCP"] <- "LDI_061"
 df.e[df.e$GCP == "LDI_62", "GCP"] <- "LDI_062"
@@ -187,8 +192,30 @@ df.search <- df.e[grep("LDI_084", df.e[, "GCP"]), ]
 df.skip <- df.search[df.search[, "GrE"] == 1, ]
 df.e <- df.e[!(row.names(df.e) %in% row.names(df.skip)), ]
 ##'
+##' -> subset of LDI entries
+df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ] 
 ##'
 ##'
+##'
+##'
+##'
+##' 3. Base Station label editing
+# df.search <- df.e[union(grep("e[bB]e", df.e[, "GCP"]),
+#                        grep("[bB]ase", df.e[, "GCP"])), ]
+##'
+df.e[df.e$GCP == "Base1;RedHut", "GCP"] <- "Base_1"
+df.e[df.e$GCP == "base2;BaseCamp", "GCP"] <- "Base_2"
+df.e[df.e$GCP == "eBee1", "GCP"] <- "Base_eBee1"
+df.e[df.e$GCP == "Base-eBeeRTK_02_;eBee2", "GCP"] <- "Base_eBee2"
+df.e[df.e$GCP == "base_03_blackpol;eBee3", "GCP"] <- "Base_eBee3"
+df.e[df.e$GCP == "base_04_blackpol;eBee4", "GCP"] <- "Base_eBee4"
+df.e[df.e$GCP == "ebeeRTK_base_07_;eBee5", "GCP"] <- "Base_eBee5&eBee7"
+df.e[df.e$GCP == "ebeRTK_base_08_b;eBee6", "GCP"] <- "Base_eBee6&eBee8"
+##'
+##' -> subset of LDI entries
+df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ] 
+##'
+
 ##'
 ##'
 df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ]
