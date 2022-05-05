@@ -145,18 +145,20 @@ df.e <- df.q
 ##' start log entry
 LogFile <- paste0("GNSS_Data_", OutName, "_Editing_of_Measurements.log")
 setwd(tmp) 
-cat(paste0(Sys.time(), "\n -> Editing of Data Entries\n\n",
-           if(!exists("OutName")) {
-             paste0("File: ", FILE)
-           } else {paste0("GNSS_Data: ", OutName)},
-           "\n\n"),
+cat(paste0(Sys.time(), "\n -> Editing of Data Entries: ",
+           if(exists("OutName")) paste0("GNSS_Data: ", OutName, "\n"),
+           if(exists("FILE")) {
+             paste0(" -> data file: ", FILE, "\n\n")
+           } else {"\n"}),
     append = FALSE, file = LogFile)
 setwd(base.dir)
 ##' end log entry 
 ##'
 ##' Correcting of data label inconsistencies / typos
+##' ------------------------------------------------
 ##' 
-##' 1. LDI label editing
+##' LDI label editing
+##' -----------------
 # df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ] 
 # df.search <- df.e[grep("LDI_0[6-7]", df.e[, "GCP"]), ]
 ##' 
@@ -192,14 +194,20 @@ df.search <- df.e[grep("LDI_084", df.e[, "GCP"]), ]
 df.skip <- df.search[df.search[, "GrE"] == 1, ]
 df.e <- df.e[!(row.names(df.e) %in% row.names(df.skip)), ]
 ##'
-##' -> subset of LDI entries
-df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ] 
+##' start log entry
+setwd(tmp) 
+cat(paste0("-> Lables of LDI entries corrected / edited",
+           " (", format(Sys.time(), "%X"), ").\n\n",
+           if(!is.null(warnings())){
+             paste0(" -> warnings: ", names(warnings()), "\n")
+           }
+          ),
+    append = TRUE, file = LogFile)
+setwd(base.dir)
 ##'
 ##'
-##'
-##'
-##'
-##' 3. Base Station label editing
+##' Base Station label editing
+##' --------------------------
 # df.search <- df.e[union(grep("e[bB]e", df.e[, "GCP"]),
 #                        grep("[bB]ase", df.e[, "GCP"])), ]
 ##'
@@ -212,10 +220,25 @@ df.e[df.e$GCP == "base_04_blackpol;eBee4", "GCP"] <- "Base_eBee4"
 df.e[df.e$GCP == "ebeeRTK_base_07_;eBee5", "GCP"] <- "Base_eBee5&eBee7"
 df.e[df.e$GCP == "ebeRTK_base_08_b;eBee6", "GCP"] <- "Base_eBee6&eBee8"
 ##'
+##' start log entry
+setwd(tmp) 
+cat(paste0("-> Lables of Base Station entries corrected / edited",
+           " (", format(Sys.time(), "%X"), ").\n\n",
+           if(!is.null(warnings())){
+             paste0(" -> warnings: ", names(warnings()), "\n")
+           }
+),
+append = TRUE, file = LogFile)
+setwd(base.dir)
+##'
+##'
+##'
+##'
+##' sub-setting data for data export
+##' --------------------------------
+##' 
 ##' -> subset of LDI entries
 df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ] 
-##'
-
 ##'
 ##'
 df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ]
