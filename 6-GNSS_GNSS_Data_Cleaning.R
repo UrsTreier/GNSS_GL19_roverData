@@ -194,9 +194,27 @@ df.search <- df.e[grep("LDI_084", df.e[, "GCP"]), ]
 df.skip <- df.search[df.search[, "GrE"] == 1, ]
 df.e <- df.e[!(row.names(df.e) %in% row.names(df.skip)), ]
 ##'
+##' -> cleaning LDI_RDI labels
+##' 
+df.hCorr <- read.csv(paste0("https://raw.githubusercontent.com/",
+                            "UrsTreier/disko2019/master/data/",
+                            "microclim/tms_data/tms_plot_meta.csv",
+                            "?token=",
+                            "GHSAT0AAAAAABUNPDBJ7BDPO7UZYBMU6AUUYT2R4MA"))
+df.hCorr <- df.hCorr[, c("plot_ID",
+                        "shield_height_1",
+                        "shield_height_2",
+                        "shield_height_3",
+                        "shield_height_4",
+                        "peg_height",
+                        "TMS_substrate",
+                        "comment_setup",
+                        "comment_tms_retrieval",
+                        "comment_hobo_retrieval")]
+##'
 ##' start log entry
 setwd(tmp) 
-cat(paste0("-> Lables of LDI entries corrected / edited",
+cat(paste0(" -> Lables of LDI entries corrected / edited",
            " (", format(Sys.time(), "%X"), ").\n\n",
            if(!is.null(warnings())){
              paste0(" -> warnings: ", names(warnings()), "\n")
@@ -222,7 +240,7 @@ df.e[df.e$GCP == "ebeRTK_base_08_b;eBee6", "GCP"] <- "Base_eBee6&eBee8"
 ##'
 ##' start log entry
 setwd(tmp) 
-cat(paste0("-> Lables of Base Station entries corrected / edited",
+cat(paste0(" -> Lables of Base Station entries corrected / edited",
            " (", format(Sys.time(), "%X"), ").\n\n",
            if(!is.null(warnings())){
              paste0(" -> warnings: ", names(warnings()), "\n")
@@ -242,8 +260,12 @@ df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ]
 ##'
 ##'
 df.LDI <- df.e[grep("LDI",df.e[, "GCP"]), ]
-df.search <- df.e[grep("LDI_0[6-7]", df.e[, "GCP"]), ]
+df.search <- df.e[grep("121;122;123;124;713;714", df.e[, "Gr"]), ]
 df.search <- df.e[grep("LDI_023", df.e[, "GCP"]), ]
+##'
+##'
+df.search <- df.e[union(grep("LDI_H1", df.e[, "GCP"]),
+                        grep("IRSAE", df.e[, "GCP"])), ]
 ##'
 map_widget(df.search$GCP, df.search$Latitude, df.search$Longitude)
 ##'
