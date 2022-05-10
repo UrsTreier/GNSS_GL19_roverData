@@ -194,8 +194,8 @@ df.search <- df.e[grep("LDI_084", df.e[, "GCP"]), ]
 df.skip <- df.search[df.search[, "GrE"] == 1, ]
 df.e <- df.e[!(row.names(df.e) %in% row.names(df.skip)), ]
 ##'
-##' -> cleaning LDI_RDI labels
-##' 
+##'
+##' -> getting heigt data for tent pegs and logger 
 df.hCorr <- read.csv(paste0("https://raw.githubusercontent.com/",
                             "UrsTreier/disko2019/master/data/",
                             "microclim/tms_data/tms_plot_meta.csv",
@@ -211,6 +211,9 @@ df.hCorr <- df.hCorr[, c("plot_ID",
                         "comment_setup",
                         "comment_tms_retrieval",
                         "comment_hobo_retrieval")]
+##'
+##'
+##' -> cleaning LDI_RDI labels
 ##'
 ##' start log entry
 setwd(tmp) 
