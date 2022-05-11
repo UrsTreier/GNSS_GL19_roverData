@@ -215,6 +215,12 @@ df.hCorr <- df.hCorr[, c("plot_ID",
                         "comment_tms_retrieval",
                         "comment_hobo_retrieval")]
 ##'
+##' -> correcting height data for LDI plot locations
+for (i in df.hCorr$plot_ID) { # i = "LDI_001"
+  df.search <- df.e[df.e[, "GCP"] == i, c("HeightAE", "Elevation")]
+  # subtracting the peg height measured in cm from the z coordinates
+  df.search <- df.search - df.hCorr[df.hCorr$plot_ID == i, "peg_height"]/100
+}
 ##'
 ##' -> cleaning LDI_RDI labels
 ##'
