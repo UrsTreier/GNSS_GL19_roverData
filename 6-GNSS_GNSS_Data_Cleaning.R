@@ -60,6 +60,10 @@ tmp <- file.path(export.dir, "tmp")
 if(length(intersect(list.dirs(export.dir, full.names = F),"tmp")) == 0) {
   dir.create(tmp)}
 ##'
+##' token for GitHub files
+tms_plot_meta_token <- "GHSAT0AAAAAABUOTBDYTXJOCIRF2FACKSFQYT3XV3Q"
+##'
+##'
 ### END OF DEFINITION OF VARIABLES #############################################
 ##'_____________________________________________________________________________
 ##'
@@ -195,12 +199,11 @@ df.skip <- df.search[df.search[, "GrE"] == 1, ]
 df.e <- df.e[!(row.names(df.e) %in% row.names(df.skip)), ]
 ##'
 ##'
-##' -> getting heigt data for tent pegs and logger 
+##' -> getting height data for tent pegs and logger 
 df.hCorr <- read.csv(paste0("https://raw.githubusercontent.com/",
                             "UrsTreier/disko2019/master/data/",
                             "microclim/tms_data/tms_plot_meta.csv",
-                            "?token=",
-                            "GHSAT0AAAAAABUNPDBJ7BDPO7UZYBMU6AUUYT2R4MA"))
+                            "?token=", tms_plot_meta_token))
 df.hCorr <- df.hCorr[, c("plot_ID",
                         "shield_height_1",
                         "shield_height_2",
