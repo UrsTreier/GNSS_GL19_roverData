@@ -61,7 +61,7 @@ if(length(intersect(list.dirs(export.dir, full.names = F),"tmp")) == 0) {
   dir.create(tmp)}
 ##'
 ##' token for GitHub files
-tms_plot_meta_token <- "GHSAT0AAAAAABUOTBDYTXJOCIRF2FACKSFQYT3XV3Q"
+tms_plot_meta_token <- "GHSAT0AAAAAABUOXKFODKAML2TIPRXC2W4SYT32WZA"
 ##'
 ##'
 ### END OF DEFINITION OF VARIABLES #############################################
@@ -198,10 +198,10 @@ df.search <- df.e[grep("LDI_084", df.e[, "GCP"]), ]
 df.skip <- df.search[df.search[, "GrE"] == 1, ]
 df.e <- df.e[!(row.names(df.e) %in% row.names(df.skip)), ]
 ##'
-##' -> correct the labels for the "weatherstation" loggers
+##' -> correct the labels for the "weather station" loggers
 df.e[df.e$GCP == "LDI_weatherst_W1", "GCP"] <- "LDI_W1" 
 df.e[df.e$GCP == "LDI_W2_weatherst", "GCP"] <- "LDI_W2"
-df.e[df.e$GCP == "LDI_WEA_70_Top", "GCP"] <- "LDI_W3"
+df.e[df.e$GCP == "LDI_WEA_70_Top", "GCP"] <- "LDI_W3_top"
 ##'
 ##'
 ##' -> getting height data for tent pegs and logger 
@@ -222,9 +222,10 @@ df.hCorr <- df.hCorr[, c("plot_ID",
 ##'
 ##' -> correcting height data for LDI plot locations
 for (i in df.hCorr$plot_ID) { # i = "LDI_001"
-  df.search <- df.e[df.e[, "GCP"] == i, c("HeightAE", "Elevation")]
+  df.search <- df.e[grep(i, df.e[, "GCP"]), c("HeightAE", "Elevation")]
   # subtracting the peg height measured in cm from the z coordinates
-  if(!is.na(df.hCorr[df.hCorr$plot_ID == i, "peg_height"])) {
+  if(!is.na(df.hCorr[df.hCorr$plot_ID == i, "peg_height"]) &
+     nrow(df.search) == 1) {
     df.search <- df.search - df.hCorr[df.hCorr$plot_ID == i, "peg_height"]/100
   }
  
