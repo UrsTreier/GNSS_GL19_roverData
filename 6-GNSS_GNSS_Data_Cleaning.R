@@ -198,6 +198,11 @@ df.search <- df.e[grep("LDI_084", df.e[, "GCP"]), ]
 df.skip <- df.search[df.search[, "GrE"] == 1, ]
 df.e <- df.e[!(row.names(df.e) %in% row.names(df.skip)), ]
 ##'
+##' -> correct the labels for the "weatherstation" loggers
+df.e[df.e$GCP == "LDI_weatherst_W1", "GCP"] <- "LDI_W1" 
+df.e[df.e$GCP == "LDI_W2_weatherst", "GCP"] <- "LDI_W2"
+df.e[df.e$GCP == "LDI_WEA_70_Top", "GCP"] <- "LDI_W3"
+##'
 ##'
 ##' -> getting height data for tent pegs and logger 
 df.hCorr <- read.csv(paste0("https://raw.githubusercontent.com/",
@@ -219,7 +224,10 @@ df.hCorr <- df.hCorr[, c("plot_ID",
 for (i in df.hCorr$plot_ID) { # i = "LDI_001"
   df.search <- df.e[df.e[, "GCP"] == i, c("HeightAE", "Elevation")]
   # subtracting the peg height measured in cm from the z coordinates
-  df.search <- df.search - df.hCorr[df.hCorr$plot_ID == i, "peg_height"]/100
+  if(!is.na(df.hCorr[df.hCorr$plot_ID == i, "peg_height"])) {
+    df.search <- df.search - df.hCorr[df.hCorr$plot_ID == i, "peg_height"]/100
+  }
+ 
 }
 ##'
 ##' -> cleaning LDI_RDI labels
