@@ -61,7 +61,8 @@ if(length(intersect(list.dirs(export.dir, full.names = F),"tmp")) == 0) {
   dir.create(tmp)}
 ##'
 ##' token for GitHub files
-tms_plot_meta_token <- "GHSAT0AAAAAABUOXKFODKAML2TIPRXC2W4SYT32WZA"
+##' -> disko2019/master/data/microclim/tms_data/tms_plot_meta.csv
+tms_plot_meta_token <- "GHSAT0AAAAAABVFGKVBXU2UZ6P4J5FVKID6YUXJCRQ"
 ##'
 ##'
 ### END OF DEFINITION OF VARIABLES #############################################
@@ -209,6 +210,7 @@ df.hCorr <- read.csv(paste0("https://raw.githubusercontent.com/",
                             "UrsTreier/disko2019/master/data/",
                             "microclim/tms_data/tms_plot_meta.csv",
                             "?token=", tms_plot_meta_token))
+##'
 df.hCorr <- df.hCorr[, c("plot_ID",
                         "shield_height_1",
                         "shield_height_2",
@@ -219,6 +221,9 @@ df.hCorr <- df.hCorr[, c("plot_ID",
                         "comment_setup",
                         "comment_tms_retrieval",
                         "comment_hobo_retrieval")]
+##' replacing NA values with meaian peg_height 
+median.peg_height <- median(df.hCorr$peg_height, na.rm = TRUE)
+df.hCorr[is.na(df.hCorr$peg_height), "peg_height"] <- median.peg_height
 ##'
 ##' -> correcting height data for LDI plot locations
 for (i in df.hCorr$plot_ID) { # i = "LDI_001"
