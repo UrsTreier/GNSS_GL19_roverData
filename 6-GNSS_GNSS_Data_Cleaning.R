@@ -62,7 +62,7 @@ if(length(intersect(list.dirs(export.dir, full.names = F),"tmp")) == 0) {
 ##'
 ##' token for GitHub files
 ##' -> disko2019/master/data/microclim/tms_data/tms_plot_meta.csv
-tms_plot_meta_token <- "GHSAT0AAAAAABVFGKVBXU2UZ6P4J5FVKID6YUXJCRQ"
+tms_plot_meta_token <- "GHSAT0AAAAAABV4KCACNYX4HXOXWAGJNXY2YVTF25Q"
 ##'
 ##'
 ### END OF DEFINITION OF VARIABLES #############################################
@@ -210,7 +210,7 @@ df.hCorr <- read.csv(paste0("https://raw.githubusercontent.com/",
                             "UrsTreier/disko2019/master/data/",
                             "microclim/tms_data/tms_plot_meta.csv",
                             "?token=", tms_plot_meta_token))
-##'
+##' selecting relevant variables
 df.hCorr <- df.hCorr[, c("plot_ID",
                         "shield_height_1",
                         "shield_height_2",
@@ -221,7 +221,9 @@ df.hCorr <- df.hCorr[, c("plot_ID",
                         "comment_setup",
                         "comment_tms_retrieval",
                         "comment_hobo_retrieval")]
-##' replacing NA values with meaian peg_height 
+##' selecting only LDI vegetation plots
+df.hCorr <- df.hCorr[grep("LDI_0[0-9][0-9]", df.hCorr[, "plot_ID"]), ]  
+##' replacing NA values with median peg_height 
 median.peg_height <- median(df.hCorr$peg_height, na.rm = TRUE)
 df.hCorr[is.na(df.hCorr$peg_height), "peg_height"] <- median.peg_height
 ##'
@@ -233,8 +235,11 @@ for (i in df.hCorr$plot_ID) { # i = "LDI_001"
      nrow(df.search) == 1) {
     df.search <- df.search - df.hCorr[df.hCorr$plot_ID == i, "peg_height"]/100
   }
- 
+  df.e[grep(i, df.e[, "GCP"]), c("HeightAE", "Elevation")] <- df.search
 }
+##'
+df.e[grep(i, df.e[, "GCP"]), c("HeightAE", "Elevation")]
+df.q[grep(i, df.q[, "GCP"]), c("HeightAE", "Elevation")]
 ##'
 ##' -> cleaning LDI_RDI labels
 ##'
