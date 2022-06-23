@@ -62,7 +62,7 @@ if(length(intersect(list.dirs(export.dir, full.names = F),"tmp")) == 0) {
 ##'
 ##' token for GitHub files
 ##' -> disko2019/master/data/microclim/tms_data/tms_plot_meta.csv
-tms_plot_meta_token <- "GHSAT0AAAAAABV4KCACNYX4HXOXWAGJNXY2YVTF25Q"
+tms_plot_meta_token <- "GHSAT0AAAAAABV5UGAIKQD7BV27JDAW4CFQYVURHPA"
 ##'
 ##'
 ### END OF DEFINITION OF VARIABLES #############################################
@@ -205,7 +205,17 @@ df.e[df.e$GCP == "LDI_W2_weatherst", "GCP"] <- "LDI_W2"
 df.e[df.e$GCP == "LDI_WEA_70_Top", "GCP"] <- "LDI_W3_top"
 ##'
 ##'
-##' -> getting height data for tent pegs and logger 
+##' -> getting height data for tent pegs and logger
+# setwd(tmp)
+# remotes:::download(path = paste0("https://github.com/UrsTreier/",
+#                                  "disko2019/blob/7f0df2c7deee4dad31898c2bf52",
+#                                  "be3da5e8bbbd3/data/microclim/tms_data/",
+#                                  "tms_plot_meta.csv"),
+#                    auth_token = Sys.getenv("GHPAT"))
+# df.hCorr <- read.csv()
+# file.remove(path = file)
+# setwd(base.dir)
+##' 
 df.hCorr <- read.csv(paste0("https://raw.githubusercontent.com/",
                             "UrsTreier/disko2019/master/data/",
                             "microclim/tms_data/tms_plot_meta.csv",
@@ -237,9 +247,11 @@ for (i in df.hCorr$plot_ID) { # i = "LDI_001"
   }
   df.e[grep(i, df.e[, "GCP"]), c("HeightAE", "Elevation")] <- df.search
 }
+##' check the calculations
+# df.e[grep(i, df.e[, "GCP"]), c("HeightAE", "Elevation")]
+# df.q[grep(i, df.q[, "GCP"]), c("HeightAE", "Elevation")]
 ##'
-df.e[grep(i, df.e[, "GCP"]), c("HeightAE", "Elevation")]
-df.q[grep(i, df.q[, "GCP"]), c("HeightAE", "Elevation")]
+##'
 ##'
 ##' -> cleaning LDI_RDI labels
 ##'
