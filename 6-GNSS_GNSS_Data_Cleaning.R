@@ -111,7 +111,7 @@ map_widget <- function(id, lat, long) {
 ### INSTALL / LOAD REQUIRED PACKAGES ###########################################
 ##'_____________________________________________________________________________
 ##'
-requiredPackages <- c("leaflet")
+requiredPackages <- c("leaflet", "remotes")
 loadPackages(requiredPackages)
 ##'
 ### REQUIRED PACKAGES INSTALLED / LOADED #######################################
