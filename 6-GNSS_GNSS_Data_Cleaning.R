@@ -62,7 +62,7 @@ if(length(intersect(list.dirs(export.dir, full.names = F),"tmp")) == 0) {
 ##'
 ##' token for GitHub files
 ##' -> disko2019/master/data/microclim/tms_data/tms_plot_meta.csv
-tms_plot_meta_token <- "GHSAT0AAAAAABV5UGAIKQD7BV27JDAW4CFQYVURHPA"
+tms_plot_meta_token <- "GHSAT0AAAAAABV6SO5F5KYZX33DSGYNFOFUYVVUTKQ"
 ##'
 ##'
 ### END OF DEFINITION OF VARIABLES #############################################
@@ -204,18 +204,31 @@ df.e[df.e$GCP == "LDI_weatherst_W1", "GCP"] <- "LDI_W1"
 df.e[df.e$GCP == "LDI_W2_weatherst", "GCP"] <- "LDI_W2"
 df.e[df.e$GCP == "LDI_WEA_70_Top", "GCP"] <- "LDI_W3_top"
 ##'
+##' start log entry
+setwd(tmp) 
+cat(paste0(" -> Lables of LDI entries corrected / edited",
+           " (", format(Sys.time(), "%X"), ").\n\n",
+           if(!is.null(warnings())){
+             paste0(" -> warnings: ", names(warnings()), "\n")
+           }
+),
+append = TRUE, file = LogFile)
+setwd(base.dir)
+##' end log entry
 ##'
+##' correction of measured Elevations by LDI peg height
+##' ---------------------------------------------------
 ##' -> getting height data for tent pegs and logger
 # setwd(tmp)
-# remotes:::download(path = paste0("https://github.com/UrsTreier/",
-#                                  "disko2019/blob/7f0df2c7deee4dad31898c2bf52",
-#                                  "be3da5e8bbbd3/data/microclim/tms_data/",
-#                                  "tms_plot_meta.csv"),
+# remotes:::download(path = tmp,
+#                    url = paste0("https://raw.githubusercontent.com/",
+#                                 "UrsTreier/disko2019/master/data/",
+#                                 "microclim/tms_data/tms_plot_meta.csv"),
 #                    auth_token = Sys.getenv("GHPAT"))
-# df.hCorr <- read.csv()
-# file.remove(path = file)
+# df.hCorr <- read.csv("tms_plot_meta.csv")
+# file.remove("tms_plot_meta.csv")
 # setwd(base.dir)
-##' 
+##'
 df.hCorr <- read.csv(paste0("https://raw.githubusercontent.com/",
                             "UrsTreier/disko2019/master/data/",
                             "microclim/tms_data/tms_plot_meta.csv",
@@ -248,16 +261,13 @@ for (i in df.hCorr$plot_ID) { # i = "LDI_001"
   df.e[grep(i, df.e[, "GCP"]), c("HeightAE", "Elevation")] <- df.search
 }
 ##' check the calculations
+# i = "LDI_015"
 # df.e[grep(i, df.e[, "GCP"]), c("HeightAE", "Elevation")]
 # df.q[grep(i, df.q[, "GCP"]), c("HeightAE", "Elevation")]
 ##'
-##'
-##'
-##' -> cleaning LDI_RDI labels
-##'
 ##' start log entry
 setwd(tmp) 
-cat(paste0(" -> Lables of LDI entries corrected / edited",
+cat(paste0(" -> LDI peg heights subtracted from  HeightAE and Elevation",
            " (", format(Sys.time(), "%X"), ").\n\n",
            if(!is.null(warnings())){
              paste0(" -> warnings: ", names(warnings()), "\n")
@@ -265,7 +275,7 @@ cat(paste0(" -> Lables of LDI entries corrected / edited",
           ),
     append = TRUE, file = LogFile)
 setwd(base.dir)
-##'
+##' end log entry
 ##'
 ##' Base Station label editing
 ##' --------------------------
